@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const net = require('net');
 const axios = require('axios');
+const { resolveRendererTarget } = require('./scripts/renderer-target');
 
 let mainWindow;
 let pythonProcess;
@@ -219,6 +220,7 @@ async function startPythonBackend() {
   });
 }
 
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1440,
@@ -232,7 +234,20 @@ function createWindow() {
     icon: path.join(__dirname, 'assets/icon.png')
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'frontend/index.html'));
+  const rendererTarget = resolveRendererTarget({
+    env: process.env,
+    projectRoot: __dirname,
+    resourcesPath: process.resourcesPath || '',
+    fileExists: fs.existsSync,
+  });
+  if (rendererTarget.type === 'url') {
+    console.log(`[Main] Renderer mode: ${rendererTarget.mode} (${rendererTarget.value})`);
+    mainWindow.loadURL(rendererTarget.value);
+  } else {
+    console.log(`[Main] Renderer mode: ${rendererTarget.mode} (${rendererTarget.value})`);
+    mainWindow.loadFile(rendererTarget.value);
+  }
+
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.webContents.executeJavaScript(`window.API_PORT = ${backendPort};`);
   });

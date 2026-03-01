@@ -38,9 +38,17 @@ function verifyResolverScenarios() {
     env: { PLAYE_UI: 'legacy' },
     projectRoot,
     resourcesPath: '/pkg-resources',
+    fileExists: fakeFs(new Set([repoDist])),
+  });
+  assert(legacy.mode === 'legacy-frozen-react-dist' && legacy.value === repoDist, 'legacy frozen resolver scenario failed');
+
+  const explicitLegacy = resolveRendererTarget({
+    env: { PLAYE_UI: 'legacy', PLAYE_LEGACY_UI_FROZEN: '0' },
+    projectRoot,
+    resourcesPath: '/pkg-resources',
     fileExists: fakeFs(new Set()),
   });
-  assert(legacy.mode === 'legacy' && legacy.value === legacyPath, 'legacy resolver scenario failed');
+  assert(explicitLegacy.mode === 'legacy' && explicitLegacy.value === legacyPath, 'explicit legacy resolver scenario failed');
 
   const devServer = resolveRendererTarget({
     env: { PLAYE_UI: 'react', REACT_DEV_SERVER_URL: 'http://127.0.0.1:5173' },

@@ -83,6 +83,9 @@
   - `npm run build:desktop-react`
 - В electron-builder `files` добавлен `frontend-react/dist/**/*` для упаковки React renderer в desktop билд.
 - В React shell добавлен baseline `ModelsPanel` (`features/models/*`) с интеграцией `checkModels` / `downloadModel` / `deleteModel` через Electron adapter.
+- Добавлен baseline `ClipPanel` (`features/clip/*`) с логикой `Mark IN/OUT` на базе позиции timeline и отображением диапазона в `Viewer`.
+- Добавлен unit-check для clip-форматирования/диапазонов: `npm run test:react-clip-state` (вместо некорректной проверки `.jsx` через `node --check`).
+- Включена **заморозка legacy UI** по умолчанию: `PLAYE_UI=legacy` теперь редиректится на React target, а для явного legacy нужен override `PLAYE_LEGACY_UI_FROZEN=0`.
 
 ## Доп. валидация cutover
 - Добавлен unit-тест выбора renderer: `npm run test:renderer-target`.
@@ -99,7 +102,7 @@
 ## Осталось до полного перехода
 1. Beta-прогон desktop с реальными зависимостями и React build.
 2. Финальное решение по дефолтному режиму запуска (auto уже включен, нужно подтверждение продуктом).
-3. Удаление/заморозка legacy UI после стабилизации.
+3. Физическое удаление legacy UI после стабилизации (заморозка уже включена).
 
 Итого: **3 шага**.
 
@@ -116,4 +119,4 @@
 ## Почему всё ещё осталось 3 этапа
 1. **Нужен реальный beta-прогон desktop**: текущие проверки покрывают логику выбора renderer и конфиг, но не подтверждают полный UX в целевом установочном окружении (installer + runtime).
 2. **Нужно продуктовое решение по default-режиму**: технически `auto` уже внедрён, но требуется финальное подтверждение владельцами продукта/релиза, что это дефолт для всех каналов поставки.
-3. **Legacy UI пока остаётся как safety-net**: до подтверждённой стабильности React-пути удаление legacy создаёт риск регресса и потери fallback-механизма.
+3. **Legacy UI заморожен как safety-net**: до подтверждённой стабильности React-пути физическое удаление создаёт риск регресса и потери fallback-механизма.

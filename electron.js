@@ -242,9 +242,15 @@ function createWindow() {
   });
   if (rendererTarget.type === 'url') {
     console.log(`[Main] Renderer mode: ${rendererTarget.mode} (${rendererTarget.value})`);
+    if (rendererTarget.mode.startsWith('legacy-frozen-')) {
+      console.warn('[Main] Legacy UI is frozen; forcing React renderer target.');
+    }
     mainWindow.loadURL(rendererTarget.value);
   } else {
     console.log(`[Main] Renderer mode: ${rendererTarget.mode} (${rendererTarget.value})`);
+    if (rendererTarget.mode.startsWith('legacy-frozen-')) {
+      console.warn('[Main] Legacy UI is frozen; forcing React renderer target/fallback.');
+    }
     mainWindow.loadFile(rendererTarget.value);
   }
 

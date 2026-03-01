@@ -7,12 +7,25 @@ const ROOT = '/app';
 
 const existsOnly = (allowed) => (p) => allowed.includes(p);
 
-test('returns legacy when PLAYE_UI is not react', () => {
+test('legacy mode is frozen by default and redirected to react dist when available', () => {
+  const repoDist = path.join(ROOT, 'frontend-react', 'dist', 'index.html');
   const out = resolveRendererTarget({
     env: { PLAYE_UI: 'legacy' },
     projectRoot: ROOT,
     resourcesPath: '/resources',
-    fileExists: () => true,
+    fileExists: existsOnly([repoDist]),
+  });
+  assert.equal(out.mode, 'legacy-frozen-react-dist');
+  assert.equal(out.type, 'file');
+  assert.equal(out.value, repoDist);
+});
+
+test('legacy mode can be explicitly unfrozen', () => {
+  const out = resolveRendererTarget({
+    env: { PLAYE_UI: 'legacy', PLAYE_LEGACY_UI_FROZEN: '0' },
+    projectRoot: ROOT,
+    resourcesPath: '/resources',
+    fileExists: () => false,
   });
   assert.equal(out.mode, 'legacy');
   assert.equal(out.type, 'file');

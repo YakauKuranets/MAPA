@@ -38,9 +38,9 @@ function main() {
       reason: 'Нужно подтверждение продукта/релиза для дефолтного режима запуска.',
     },
     {
-      id: 'legacy-freeze-removal',
+      id: 'legacy-hard-removal',
       status: 'pending',
-      reason: 'Legacy удаляется после подтверждённой стабильности React-path.',
+      reason: 'Legacy UI уже заморожен; остаётся физическое удаление после подтверждённой стабильности React-path.',
     },
   ];
 

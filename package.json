@@ -35,7 +35,8 @@
     "cutover:evidence": "node scripts/collect-cutover-evidence.js",
     "verify:electron-adapter-parity": "node scripts/verify-electron-adapter-parity.js",
     "cutover:gates": "node scripts/cutover-gates.js",
-    "preflight:react-cutover": "node scripts/preflight-react-cutover.js"
+    "preflight:react-cutover": "node scripts/preflight-react-cutover.js",
+    "test:react-clip-state": "node --test scripts/test-react-clip-state.js"
   },
   "build": {
     "appId": "com.playe.photolab",

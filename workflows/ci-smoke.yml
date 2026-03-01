@@ -35,6 +35,25 @@ jobs:
       - name: Run JS smoke checks
         run: npm run ci:smoke
 
+      - name: React cutover verification
+        run: |
+          npm run test:renderer-target
+          npm run verify:react-cutover
+          npm run verify:electron-adapter-parity
+
+      - name: Migration status snapshot
+        run: npm run migration:status
+
+      - name: Cutover evidence artifact
+        run: npm run cutover:evidence
+
+      - name: Upload cutover evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-cutover-evidence
+          path: artifacts/react-cutover-evidence.json
+          if-no-files-found: error
+
       - name: Python — импорт модулей backend
         run: |
           cd backend
@@ -50,26 +69,16 @@ jobs:
           "
 
       - name: Python — тест RBAC route matching
-        run: |
-          cd PLAYE_Desktop_AI_stage3
-          PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-rbac-route-matching.py
+        run: PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-rbac-route-matching.py
 
       - name: Python — тест enterprise report schema
-        run: |
-          cd PLAYE_Desktop_AI_stage3
-          PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-enterprise-report-schema.py
+        run: PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-enterprise-report-schema.py
 
       - name: Python — тест enterprise report filters
-        run: |
-          cd PLAYE_Desktop_AI_stage3
-          PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-enterprise-report-filters.py
+        run: PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-enterprise-report-filters.py
 
       - name: Python — тест job params validation
-        run: |
-          cd PLAYE_Desktop_AI_stage3
-          PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-job-params.py
+        run: PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-job-params.py
 
       - name: Python — тест task status
-        run: |
-          cd PLAYE_Desktop_AI_stage3
-          PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-task-status.py
+        run: PLAYE_ALLOW_INSECURE_JWT=1 python scripts/test-task-status.py
